@@ -34,18 +34,21 @@
 
       <!-- Quick Alarm Controls -->
       <div class="header-alarm-controls">
-        <!-- Nada Alarm Selector -->
-        <select class="control-tone-select" id="alarmToneSelect" title="Pilih Nada Dering Alarm">
-          <option value="bell-del">🔔 Bell Kampus Del</option>
+        <!-- Nada Alarm Selector Bersemangat -->
+        <select class="control-tone-select" id="alarmToneSelect" title="Pilih Nada Alarm Pengingat">
+          <option value="fanfare-semangat" selected>🔥 Fanfare Semangat Del</option>
+          <option value="reveille-pagi">🎺 Reveille Sangkakala Pagi</option>
+          <option value="electronic-energizer">⚡ Upbeat Synth Energizer</option>
+          <option value="bell-del">🔔 Lonceng Kampus Del</option>
           <option value="chime-asrama">🎵 Chime Asrama Lembut</option>
-          <option value="digital-modern">⚡ Alarm Digital Modern</option>
-          <option value="gong-devotion">🕊️ Gong Devotion / Ibadah</option>
+          <option value="digital-modern">⏰ Alarm Digital Modern</option>
+          <option value="gong-devotion">🕊️ Gong Devotion Teduh</option>
         </select>
 
         <!-- Volume Slider -->
         <div style="display:flex; align-items:center; gap:6px;" title="Volume Alarm">
           <i class="fa-solid fa-volume-low" style="font-size:0.8rem; color:var(--text-muted);"></i>
-          <input type="range" id="alarmVolumeSlider" min="0" max="1" step="0.1" value="0.8" style="width:70px; cursor:pointer;">
+          <input type="range" id="alarmVolumeSlider" min="0" max="1" step="0.1" value="0.9" style="width:70px; cursor:pointer;">
         </div>
 
         <!-- Voice TTS Toggle -->

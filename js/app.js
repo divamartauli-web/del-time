@@ -467,6 +467,17 @@ class DelTimeApp {
 
     // Volume Slider
     const volSlider = document.getElementById("alarmVolumeSlider");
+    // Nada Alarm Tone Selector
+    const toneSelect = document.getElementById("alarmToneSelect");
+    if (toneSelect) {
+      delAlarmAudio.setTone(toneSelect.value);
+      toneSelect.addEventListener("change", (e) => {
+        delAlarmAudio.setTone(e.target.value);
+        delAlarmAudio.playCurrentAlarmTone();
+        this.showToast(`🔔 Nada diubah ke: ${e.target.options[e.target.selectedIndex].text}`);
+      });
+    }
+
     if (volSlider) {
       volSlider.addEventListener("input", (e) => {
         delAlarmAudio.setVolume(parseFloat(e.target.value));
