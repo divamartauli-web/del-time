@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DelTime ⏰ Alarm Pengingat Jadwal Mahasiswa IT Del</title>
+  <meta name="description" content="Aplikasi alarm cerdas dan pengingat jadwal kegiatan jam demi jam untuk mahasiswa Institut Teknologi Del (IT Del) Laguboti. Disiplin, Terjadwal, MarTuhan, Marroha, Marbisuk.">
+  
+  <!-- Google Fonts: Outfit & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="app-wrapper">
+    <!-- =======================================================
+         HEADER & CAMPUS BRAND
+    ======================================================= -->
+    <header class="app-header">
+      <div class="brand-group">
+        <div class="del-logo-badge">
+          <i class="fa-solid fa-graduation-cap"></i>
+        </div>
+        <div>
+          <h1 class="brand-title">DelTime ⏰</h1>
+          <div class="brand-motto-tag">Institut Teknologi Del • MarTuhan, Marroha, Marbisuk</div>
+        </div>
+      </div>
+
+      <!-- Quick Alarm Controls -->
+      <div class="header-alarm-controls">
+        <!-- Nada Alarm Selector -->
+        <select class="control-tone-select" id="alarmToneSelect" title="Pilih Nada Dering Alarm">
+          <option value="bell-del">🔔 Bell Kampus Del</option>
+          <option value="chime-asrama">🎵 Chime Asrama Lembut</option>
+          <option value="digital-modern">⚡ Alarm Digital Modern</option>
+          <option value="gong-devotion">🕊️ Gong Devotion / Ibadah</option>
+        </select>
+
+        <!-- Volume Slider -->
+        <div style="display:flex; align-items:center; gap:6px;" title="Volume Alarm">
+          <i class="fa-solid fa-volume-low" style="font-size:0.8rem; color:var(--text-muted);"></i>
+          <input type="range" id="alarmVolumeSlider" min="0" max="1" step="0.1" value="0.8" style="width:70px; cursor:pointer;">
+        </div>
+
+        <!-- Voice TTS Toggle -->
+        <label style="font-size:0.82rem; display:flex; align-items:center; gap:5px; cursor:pointer; color:var(--del-cyan);" title="Suara Pengingat Bicara Otomatis">
+          <input type="checkbox" id="voiceToggleCheckbox" checked>
+          <span>Voice TTS</span>
+        </label>
+
+        <!-- Mute Audio Button -->
+        <button class="btn-icon-control" id="btnToggleMute" title="Mute / Unmute Suara">
+          <i class="fa-solid fa-volume-high"></i>
+        </button>
+
+        <!-- Test Alarm Button -->
+        <button class="btn-test-alarm" id="btnTestAlarm" title="Uji Coba Bunyi Alarm & Suara">
+          <i class="fa-solid fa-bell"></i> Tes Alarm
+        </button>
+      </div>
+    </header>
+
+    <!-- =======================================================
+         HERO REAL-TIME CLOCK & ACTIVE HUD
+    ======================================================= -->
+    <section class="hero-clock-grid">
+      <!-- 1. Real-time Digital Clock -->
+      <div class="hero-clock-card">
+        <div class="live-day-badge" id="liveDayBadge">Hari Ini</div>
+        <div class="digital-clock-display" id="liveDigitalClock">00:00<span class="clock-sec">:00</span></div>
+        <div class="live-date-text" id="liveDateText">Memuat tanggal...</div>
+      </div>
+
+      <!-- 2. NOW HAPPENING ACTIVITY CARD -->
+      <div class="now-happening-card">
+        <div class="now-happening-header">
+          <div class="status-indicator-live">
+            <span class="pulse-dot"></span> SEDANG BERLANGSUNG
+          </div>
+          <span style="font-size:0.8rem; color:var(--del-gold); font-family:var(--font-mono);">JADWAL KAMPUS DEL</span>
+        </div>
+
+        <div class="now-act-main">
+          <i class="fa-solid fa-book-open hud-act-icon" id="hudCurrentIcon"></i>
+          <div>
+            <h2 class="now-act-title" id="hudCurrentTitle">Memuat Kegiatan...</h2>
+            <div class="now-act-loc" id="hudCurrentLocation"><i class="fa-solid fa-location-dot"></i> -</div>
+          </div>
+        </div>
+
+        <p class="now-act-desc" id="hudCurrentDesc">-</p>
+
+        <div class="now-progress-box">
+          <div class="now-progress-track">
+            <div class="now-progress-fill" id="hudCurrentProgressBar" style="width: 0%;"></div>
+          </div>
+          <div class="now-progress-meta">
+            <span>Progress Waktu</span>
+            <span id="hudCurrentRemaining">Tersisa: -</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. UPCOMING NEXT ACTIVITY CARD -->
+      <div class="next-activity-card">
+        <div>
+          <div class="next-label"><i class="fa-solid fa-forward-step"></i> BERIKUTNYA</div>
+          <h3 class="next-title" id="hudNextTitle">-</h3>
+          <div class="next-time" id="hudNextTime">-</div>
+        </div>
+        <div class="next-loc" id="hudNextLocation"><i class="fa-solid fa-location-dot"></i> -</div>
+      </div>
+    </section>
+
+    <!-- =======================================================
+         MAIN DASHBOARD: SCHEDULE TIMELINE + ASRAMA SIDEBAR
+    ======================================================= -->
+    <main class="main-dashboard-grid">
+      <!-- LEFT: TIMELINE JADWAL -->
+      <section>
+        <!-- Day Selector Tabs -->
+        <div class="day-selector-bar">
+          <button class="day-selector-btn active" data-day="1">Senin</button>
+          <button class="day-selector-btn" data-day="2">Selasa</button>
+          <button class="day-selector-btn" data-day="3">Rabu</button>
+          <button class="day-selector-btn" data-day="4">Kamis</button>
+          <button class="day-selector-btn" data-day="5">Jumat</button>
+          <button class="day-selector-btn" data-day="6">Sabtu (Kurve)</button>
+          <button class="day-selector-btn" data-day="0">Minggu (Ibadah)</button>
+        </div>
+
+        <!-- Filter Tags -->
+        <div class="filter-tags-bar">
+          <button class="filter-tag-btn active" data-filter="all">Semua Jam</button>
+          <button class="filter-tag-btn" data-filter="academic">📚 Kuliah & Lab</button>
+          <button class="filter-tag-btn" data-filter="meal">🍽️ Kantin / Makan</button>
+          <button class="filter-tag-btn" data-filter="study">💻 Belajar Malam</button>
+          <button class="filter-tag-btn" data-filter="dorm">🛏️ Asrama / Kurve</button>
+          <button class="filter-tag-btn" data-filter="devotion">🕊️ Ibadah / Saat Teduh</button>
+        </div>
+
+        <!-- Timeline Cards Container -->
+        <div class="timeline-list-wrap" id="scheduleTimelineContainer"></div>
+      </section>
+
+      <!-- RIGHT SIDEBAR: UNIFORM, 3M QUOTES & TASKS -->
+      <aside class="sidebar-column">
+        <!-- 1. Seragam Hari Ini -->
+        <div class="sidebar-card">
+          <h3><i class="fa-solid fa-shirt" style="color:var(--del-gold);"></i> Panduan Seragam Del</h3>
+          <div class="uniform-box">
+            <h4 class="uniform-day-title" id="todayUniformTitle">Seragam Hari Ini</h4>
+            <p class="uniform-desc" id="todayUniformDesc">-</p>
+            <div class="uniform-notes" id="todayUniformNotes">-</div>
+          </div>
+        </div>
+
+        <!-- 2. Nilai 3M Del Quotes -->
+        <div class="sidebar-card">
+          <h3><i class="fa-solid fa-heart-pulse" style="color:var(--del-cyan);"></i> Nilai 3M Hari Ini</h3>
+          <div class="quote-3m-box">
+            <p class="quote-3m-text" id="quote3MText">-</p>
+            <span class="quote-3m-motto" id="quote3MMotto">-</span>
+          </div>
+        </div>
+
+        <!-- 3. Task / Praktikum Deadline Tracker -->
+        <div class="sidebar-card">
+          <div class="tasks-header-row">
+            <h3><i class="fa-solid fa-list-check" style="color:var(--del-mint);"></i> Tugas & Praktikum</h3>
+            <span class="active-badge" id="activeTasksCount">0 Aktif</span>
+          </div>
+
+          <div class="tasks-list-container" id="tasksListContainer"></div>
+
+          <!-- Add Task Form -->
+          <form class="add-task-form" id="addTaskForm">
+            <input type="text" class="task-input-text" id="taskInputTitle" placeholder="Nama tugas / laporan praktikum..." required>
+            <div class="task-input-row">
+              <select class="task-select" id="taskInputCategory">
+                <option value="Praktikum">Praktikum</option>
+                <option value="Kuliah">Kuliah</option>
+                <option value="Asrama">Asrama</option>
+                <option value="Proyek">Proyek</option>
+              </select>
+              <input type="text" class="task-input-text" id="taskInputDeadline" placeholder="Deadline (mis: Besok 23:59)">
+              <select class="task-select" id="taskInputPriority">
+                <option value="high">Tinggi</option>
+                <option value="medium" selected>Sedang</option>
+                <option value="low">Rendah</option>
+              </select>
+            </div>
+            <button type="submit" class="btn-add-task">
+              <i class="fa-solid fa-plus"></i> Tambah Tugas
+            </button>
+          </form>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <!-- =======================================================
+       ALARM TRIGGER POPUP MODAL
+  ======================================================= -->
+  <div class="alarm-modal-wrapper" id="alarmTriggerModal">
+    <div class="alarm-modal-backdrop"></div>
+    <div class="alarm-modal-card">
+      <div class="alarm-bell-animated">
+        <i class="fa-solid fa-bell"></i>
+      </div>
+      <div style="font-size:0.85rem; font-weight:800; color:var(--del-cyan); letter-spacing:1px; margin-bottom:4px;">
+        PENGINGAT KEGIATAN IT DEL
+      </div>
+      <h2 class="alarm-modal-title" id="modalAlarmTitle">Waktunya Belajar Malam</h2>
+      <div class="alarm-modal-loc" id="modalAlarmLocation">Gedung Kuliah / Asrama</div>
+      <div class="alarm-modal-time" id="modalAlarmTime">19:00 - 21:30 WIB</div>
+      <p class="alarm-modal-desc" id="modalAlarmDesc">Fokus tuntaskan tugas praktikum dan jaga ketertiban asrama.</p>
+
+      <div class="alarm-modal-actions">
+        <button class="btn-modal-dismiss" id="btnDismissAlarmModal">
+          <i class="fa-solid fa-check"></i> Mengerti & Siap!
+        </button>
+        <button class="btn-modal-snooze" id="btnSnoozeAlarmModal">
+          <i class="fa-solid fa-clock-rotate-left"></i> Tunda 5 Mnt
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts Loaded in Order -->
+  <script src="js/schedule-data.js"></script>
+  <script src="js/audio-alarm.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
