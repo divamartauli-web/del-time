@@ -34,13 +34,18 @@
 
       <!-- Quick Alarm Controls -->
       <div class="header-alarm-controls">
-        <!-- Nada Alarm Selector -->
+        <!-- Nada Alarm Selector iPhone -->
         <select class="control-tone-select" id="alarmToneSelect" title="Pilih Nada Dering Alarm">
-          <option value="bell-del">🔔 Bell Kampus Del</option>
-          <option value="chime-asrama">🎵 Chime Asrama Lembut</option>
-          <option value="digital-modern">⚡ Alarm Digital Modern</option>
-          <option value="gong-devotion">🕊️ Gong Devotion / Ibadah</option>
+          <option value="iphone-radar" selected>📱 iPhone Radar (Alarm Asli)</option>
+          <option value="iphone-marimba">🎵 iPhone Marimba (Ringtone)</option>
+          <option value="iphone-opening">✨ iPhone Opening (Reflections)</option>
+          <option value="bell-del">🔔 Bell Kampus IT Del</option>
         </select>
+
+        <!-- Vibration Indicator / Toggle -->
+        <button class="vibration-badge" id="btnToggleVibration" style="cursor:pointer; border:1px solid rgba(0,242,254,0.4);" title="Aktifkan/Matikan Getaran Layar & Haptik">
+          <i class="fa-solid fa-mobile-screen-button"></i> <span id="vibrationStatusText">Getar: ON</span>
+        </button>
 
         <!-- Volume Slider -->
         <div style="display:flex; align-items:center; gap:6px;" title="Volume Alarm">
