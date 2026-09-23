@@ -1,16 +1,15 @@
 /**
- * Audio Alarm & iPhone Ringtone + Haptic Vibration Engine for IT Del Smart Alarm
- * Suara Asli iPhone (Radar, Marimba, Opening) + Efek Getaran Haptik Nyata & Visual Layar
+ * Audio Alarm & Voice Synthesizer Engine for IT Del Smart Alarm
+ * Suara Bell Kampus, Chime Asrama, Alarm Digital & Pengumuman Suara (TTS)
  */
 
 class DelAudioAlarm {
   constructor() {
     this.ctx = null;
     this.isMuted = false;
-    this.currentTone = "iphone-radar"; // 'iphone-radar', 'iphone-marimba', 'iphone-opening', 'bell-del', 'chime-asrama'
-    this.volume = 0.85;
+    this.currentTone = "bell-del"; // 'bell-del', 'chime-asrama', 'digital-modern', 'gong-devotion'
+    this.volume = 0.8;
     this.isVoiceEnabled = true;
-    this.isVibrationEnabled = true;
     this.indonesianVoice = null;
 
     this.initAudioContext();
@@ -38,7 +37,7 @@ class DelAudioAlarm {
     if ("speechSynthesis" in window) {
       const load = () => {
         const voices = window.speechSynthesis.getVoices();
-        // Prioritaskan suara bahasa Indonesia (id-ID / id_ID / Indonesian)
+        // Prioritaskan suara bahasa Indonesia (id-ID / id_ID)
         this.indonesianVoice = voices.find(v => v.lang === "id-ID" || v.lang === "id_ID" || v.lang.startsWith("id")) || null;
       };
       load();
@@ -66,197 +65,15 @@ class DelAudioAlarm {
     return this.isVoiceEnabled;
   }
 
-  toggleVibration() {
-    this.isVibrationEnabled = !this.isVibrationEnabled;
-    return this.isVibrationEnabled;
-  }
-
   /* ==========================================================
-     SISTEM GETARAN IPHONE (HARDWARE HAPTIC + SCREEN SHAKE)
-  ========================================================== */
-  triggerVibration(duration = 2000) {
-    if (!this.isVibrationEnabled) return;
-
-    // 1. Getaran Fisik Hardware (Untuk HP Android/iPhone/Perangkat Layar Sentuh)
-    if ("vibrate" in navigator) {
-      try {
-        // Pola getar berdenyut khas alarm iPhone: Getar-Jeda-Getar-Jeda-Getar Panjang
-        navigator.vibrate([120, 60, 120, 160, 120, 60, 120, 160, 120, 60, 120, 350]);
-      } catch (e) {
-        console.warn("Hardware vibration not permitted/supported", e);
-      }
-    }
-
-    // 2. Efek Getaran Layar Haptik Visual (Screen Shake) di Laptop / Browser
-    const shakeElements = [
-      document.querySelector(".hero-clock-card"),
-      document.querySelector(".now-happening-card"),
-      document.getElementById("alarmModalBox")
-    ];
-
-    shakeElements.forEach(el => {
-      if (el) el.classList.add("iphone-vibrating");
-    });
-
-    setTimeout(() => {
-      shakeElements.forEach(el => {
-        if (el) el.classList.remove("iphone-vibrating");
-      });
-    }, duration);
-  }
-
-  /* ==========================================================
-     NADA SUARA IPHONE ASLI (SINTESIS WEB AUDIO API BERKUALITAS)
+     PROCEDURAL SOUND GENERATORS (WEB AUDIO API)
   ========================================================== */
 
-  /**
-   * 1. IPHONE RADAR ALARM (NADA ALARM PALING TERKENAL IPHONE)
-   * Dentuman staccato berulang khas nada alarm bangun tidur Apple iPhone
-   */
-  playIphoneRadar() {
-    if (this.isMuted || !this.ctx) return;
-    this.ensureAudioContext();
-
-    const now = this.ctx.currentTime + 0.05;
-    const baseFreq = 1250; // Frekuensi dentang khas iPhone Radar (E6)
-
-    // Pola bip ganda berulang (Double Beep Radar Cadence)
-    const pulses = [
-      { t: 0.00, f: baseFreq, d: 0.045 },
-      { t: 0.08, f: baseFreq, d: 0.045 },
-
-      { t: 0.28, f: baseFreq, d: 0.045 },
-      { t: 0.36, f: baseFreq, d: 0.045 },
-
-      { t: 0.56, f: baseFreq, d: 0.045 },
-      { t: 0.64, f: baseFreq, d: 0.045 },
-
-      { t: 0.84, f: baseFreq, d: 0.045 },
-      { t: 0.92, f: baseFreq, d: 0.045 },
-
-      // High octave chime penutup
-      { t: 1.12, f: 1875, d: 0.06 },
-      { t: 1.24, f: 2500, d: 0.12 }
-    ];
-
-    pulses.forEach(p => {
-      const osc = this.ctx.createOscillator();
-      const gain = this.ctx.createGain();
-      const startTime = now + p.t;
-
-      osc.type = "sine";
-      osc.frequency.setValueAtTime(p.f, startTime);
-
-      // Kurva envelope khas klik radar iOS yang renyah dan jernih
-      gain.gain.setValueAtTime(0.001, startTime);
-      gain.gain.linearRampToValueAtTime(this.volume * 0.45, startTime + 0.008);
-      gain.gain.exponentialRampToValueAtTime(0.0001, startTime + p.d);
-
-      osc.connect(gain);
-      gain.connect(this.ctx.destination);
-
-      osc.start(startTime);
-      osc.stop(startTime + p.d);
-    });
-  }
-
-  /**
-   * 2. IPHONE MARIMBA (RINGTONE LEGENDARIS APPLE IPHONE)
-   * Suara bilah kayu marimba asli dengan ketukan staccato ceria khas iPhone
-   */
-  playIphoneMarimba() {
-    if (this.isMuted || !this.ctx) return;
-    this.ensureAudioContext();
-
-    const now = this.ctx.currentTime + 0.05;
-
-    // Melodi Marimba iPhone: G4 -> C5 -> D5 -> G5 -> E5 -> C5 -> D5 -> G4
-    const notes = [
-      { f: 392.00, t: 0.00, d: 0.18 }, // G4
-      { f: 523.25, t: 0.13, d: 0.18 }, // C5
-      { f: 587.33, t: 0.26, d: 0.18 }, // D5
-      { f: 783.99, t: 0.39, d: 0.24 }, // G5
-      { f: 659.25, t: 0.55, d: 0.18 }, // E5
-      { f: 523.25, t: 0.68, d: 0.18 }, // C5
-      { f: 587.33, t: 0.81, d: 0.18 }, // D5
-      { f: 392.00, t: 0.94, d: 0.40 }  // G4
-    ];
-
-    notes.forEach(n => {
-      const startTime = now + n.t;
-
-      // 1. Nada Dasar Kayu Marimba
-      const osc = this.ctx.createOscillator();
-      const gain = this.ctx.createGain();
-      osc.type = "sine";
-      osc.frequency.setValueAtTime(n.f, startTime);
-
-      gain.gain.setValueAtTime(0.001, startTime);
-      gain.gain.linearRampToValueAtTime(this.volume * 0.4, startTime + 0.01);
-      gain.gain.exponentialRampToValueAtTime(0.0001, startTime + n.d);
-
-      // 2. Harmonic Mallet Click (Ketukan pemukul kayu)
-      const mallet = this.ctx.createOscillator();
-      const malletGain = this.ctx.createGain();
-      mallet.type = "triangle";
-      mallet.frequency.setValueAtTime(n.f * 3.8, startTime);
-
-      malletGain.gain.setValueAtTime(this.volume * 0.18, startTime);
-      malletGain.gain.exponentialRampToValueAtTime(0.0001, startTime + 0.04);
-
-      osc.connect(gain);
-      mallet.connect(malletGain);
-      gain.connect(this.ctx.destination);
-      malletGain.connect(this.ctx.destination);
-
-      osc.start(startTime);
-      mallet.start(startTime);
-      osc.stop(startTime + n.d);
-      mallet.stop(startTime + 0.04);
-    });
-  }
-
-  /**
-   * 3. IPHONE OPENING / REFLECTIONS (RINGTONE MODERN IOS)
-   */
-  playIphoneOpening() {
-    if (this.isMuted || !this.ctx) return;
-    this.ensureAudioContext();
-
-    const now = this.ctx.currentTime + 0.05;
-    const chords = [
-      { f: 739.99, t: 0.00, d: 0.28 }, // F#5
-      { f: 932.33, t: 0.15, d: 0.28 }, // A#5
-      { f: 1108.73, t: 0.30, d: 0.35 }, // C#6
-      { f: 1479.98, t: 0.48, d: 0.50 }  // F#6
-    ];
-
-    chords.forEach(c => {
-      const startTime = now + c.t;
-      const osc = this.ctx.createOscillator();
-      const gain = this.ctx.createGain();
-
-      osc.type = "sine";
-      osc.frequency.setValueAtTime(c.f, startTime);
-
-      gain.gain.setValueAtTime(0.001, startTime);
-      gain.gain.linearRampToValueAtTime(this.volume * 0.35, startTime + 0.015);
-      gain.gain.exponentialRampToValueAtTime(0.0001, startTime + c.d);
-
-      osc.connect(gain);
-      gain.connect(this.ctx.destination);
-      osc.start(startTime);
-      osc.stop(startTime + c.d);
-    });
-  }
-
-  /**
-   * 4. WESTMINSTER BELL KAMPUS DEL (KLASIK IT DEL)
-   */
   playBellDel() {
     if (this.isMuted || !this.ctx) return;
     this.ensureAudioContext();
 
+    // Westminster / IT Del Campus Bell Chime (E4 -> G#4 -> F#4 -> B3)
     const melody = [
       { f: 329.63, d: 0.6 }, // E4
       { f: 415.30, d: 0.6 }, // G#4
@@ -272,6 +89,7 @@ class DelAudioAlarm {
       osc.type = "sine";
       osc.frequency.setValueAtTime(note.f, time);
 
+      // Bell overtone harmonic
       const overtone = this.ctx.createOscillator();
       const overGain = this.ctx.createGain();
       overtone.type = "sine";
@@ -297,38 +115,117 @@ class DelAudioAlarm {
     });
   }
 
+  playChimeAsrama() {
+    if (this.isMuted || !this.ctx) return;
+    this.ensureAudioContext();
+
+    // Soft Harmonic Asrama Chime (C5, E5, G5, B5, C6)
+    const chord = [523.25, 659.25, 783.99, 987.77, 1046.50];
+    let time = this.ctx.currentTime;
+
+    chord.forEach((freq, idx) => {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      const start = time + (idx * 0.12);
+
+      osc.type = "triangle";
+      osc.frequency.setValueAtTime(freq, start);
+
+      gain.gain.setValueAtTime(this.volume * 0.25, start);
+      gain.gain.exponentialRampToValueAtTime(0.001, start + 1.2);
+
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+      osc.start(start);
+      osc.stop(start + 1.2);
+    });
+  }
+
+  playDigitalModern() {
+    if (this.isMuted || !this.ctx) return;
+    this.ensureAudioContext();
+
+    const beeps = [880, 880, 1174.66, 1760];
+    let time = this.ctx.currentTime;
+
+    beeps.forEach((freq, idx) => {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      const start = time + (idx * 0.1);
+
+      osc.type = "square";
+      osc.frequency.setValueAtTime(freq, start);
+
+      gain.gain.setValueAtTime(this.volume * 0.15, start);
+      gain.gain.exponentialRampToValueAtTime(0.001, start + 0.08);
+
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+      osc.start(start);
+      osc.stop(start + 0.08);
+    });
+  }
+
+  playGongDevotion() {
+    if (this.isMuted || !this.ctx) return;
+    this.ensureAudioContext();
+
+    const time = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    const subOsc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(146.83, time); // D3 Warm Gong
+
+    subOsc.type = "triangle";
+    subOsc.frequency.setValueAtTime(73.42, time); // D2 Sub
+
+    gain.gain.setValueAtTime(this.volume * 0.5, time);
+    gain.gain.exponentialRampToValueAtTime(0.001, time + 2.5);
+
+    osc.connect(gain);
+    subOsc.connect(gain);
+    gain.connect(this.ctx.destination);
+
+    osc.start(time);
+    subOsc.start(time);
+    osc.stop(time + 2.5);
+    subOsc.stop(time + 2.5);
+  }
+
   playCurrentAlarmTone() {
     switch (this.currentTone) {
-      case "iphone-radar":
-        this.playIphoneRadar();
-        break;
-      case "iphone-marimba":
-        this.playIphoneMarimba();
-        break;
-      case "iphone-opening":
-        this.playIphoneOpening();
-        break;
       case "bell-del":
         this.playBellDel();
         break;
+      case "chime-asrama":
+        this.playChimeAsrama();
+        break;
+      case "digital-modern":
+        this.playDigitalModern();
+        break;
+      case "gong-devotion":
+        this.playGongDevotion();
+        break;
       default:
-        this.playIphoneRadar();
+        this.playBellDel();
     }
   }
 
   /**
-   * Mengumumkan jadwal dengan suara jernih dan ramah
+   * Mengumumkan pesan jadwal dengan Text-To-Speech bahasa Indonesia
    * @param {string} text - Pesan pengingat
    */
   announceVoice(text) {
     if (this.isMuted || !this.isVoiceEnabled) return;
     if (!("speechSynthesis" in window)) return;
 
-    window.speechSynthesis.cancel();
+    window.speechSynthesis.cancel(); // Hentikan ucapan aktif jika ada
 
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = "id-ID";
-    utterance.rate = 1.05;
+    utterance.rate = 1.0;
     utterance.pitch = 1.05;
     utterance.volume = this.volume;
 
@@ -336,18 +233,18 @@ class DelAudioAlarm {
       utterance.voice = this.indonesianVoice;
     }
 
+    // Beri jeda 1.2 detik setelah bunyi alarm agar tidak bentrok
     setTimeout(() => {
       window.speechSynthesis.speak(utterance);
-    }, 1100);
+    }, 1200);
   }
 
   /**
-   * Memanggil alarm lengkap: Nada iPhone + Getaran Haptik & Visual Layar + Pengumuman Suara
+   * Memanggil alarm lengkap (Nada Bell + Pengumuman Suara)
    * @param {object} activity - Objek kegiatan IT Del
    */
   triggerActivityAlarm(activity) {
     this.playCurrentAlarmTone();
-    this.triggerVibration(2000); // Picu getaran fisik & getaran layar
     if (activity && activity.voiceMsg) {
       this.announceVoice(activity.voiceMsg);
     }

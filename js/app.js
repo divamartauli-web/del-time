@@ -465,31 +465,6 @@ class DelTimeApp {
       });
     }
 
-    // Nada Alarm Selector iPhone
-    const toneSelect = document.getElementById("alarmToneSelect");
-    if (toneSelect) {
-      delAlarmAudio.setTone(toneSelect.value);
-      toneSelect.addEventListener("change", (e) => {
-        delAlarmAudio.setTone(e.target.value);
-        delAlarmAudio.playCurrentAlarmTone();
-        delAlarmAudio.triggerVibration(1200);
-        this.showToast(`📱 Nada dipilih: ${e.target.options[e.target.selectedIndex].text}`);
-      });
-    }
-
-    // Toggle Getaran Haptik & Layar
-    const vibBtn = document.getElementById("btnToggleVibration");
-    const vibStatusText = document.getElementById("vibrationStatusText");
-    if (vibBtn) {
-      vibBtn.addEventListener("click", () => {
-        const isVib = delAlarmAudio.toggleVibration();
-        if (vibStatusText) vibStatusText.textContent = isVib ? "Getar: ON" : "Getar: OFF";
-        vibBtn.style.opacity = isVib ? "1" : "0.5";
-        if (isVib) delAlarmAudio.triggerVibration(600);
-        this.showToast(isVib ? "📳 Getaran Diaktifkan!" : "📴 Getaran Dinonaktifkan");
-      });
-    }
-
     // Volume Slider
     const volSlider = document.getElementById("alarmVolumeSlider");
     if (volSlider) {

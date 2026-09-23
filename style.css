@@ -956,38 +956,3 @@ body {
   transform: translateY(0);
   opacity: 1;
 }
-
-/* ==========================================================
-   IPHONE HAPTIC VIBRATION & SCREEN SHAKE EFFECT
-========================================================== */
-@keyframes iphoneHapticVibrate {
-  0% { transform: translate(0, 0) rotate(0deg); }
-  10% { transform: translate(-3px, 2px) rotate(-0.4deg); }
-  20% { transform: translate(3px, -2px) rotate(0.4deg); }
-  30% { transform: translate(-3px, -2px) rotate(-0.3deg); }
-  40% { transform: translate(3px, 2px) rotate(0.3deg); }
-  50% { transform: translate(-2px, 1px) rotate(-0.2deg); }
-  60% { transform: translate(2px, -1px) rotate(0.2deg); }
-  70% { transform: translate(-1px, 2px) rotate(-0.1deg); }
-  80% { transform: translate(1px, -2px) rotate(0.1deg); }
-  90% { transform: translate(-1px, 1px) rotate(0deg); }
-  100% { transform: translate(0, 0) rotate(0deg); }
-}
-
-.iphone-vibrating {
-  animation: iphoneHapticVibrate 0.15s ease-in-out infinite !important;
-  box-shadow: 0 0 35px rgba(0, 242, 254, 0.7), 0 0 15px rgba(245, 158, 11, 0.5) !important;
-}
-
-.vibration-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 0.78rem;
-  font-weight: 700;
-  padding: 4px 10px;
-  border-radius: 99px;
-  background: rgba(0, 242, 254, 0.12);
-  border: 1px solid rgba(0, 242, 254, 0.3);
-  color: var(--del-cyan);
-}
