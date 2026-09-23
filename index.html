@@ -13,13 +13,15 @@
   
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="style.css">
+  
+  <!-- App Stylesheet (Clean Modular CSS) -->
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
   <div class="app-wrapper">
     <!-- =======================================================
-         HEADER & CAMPUS BRAND
+         1. HEADER & CAMPUS BRAND
     ======================================================= -->
     <header class="app-header">
       <div class="brand-group">
@@ -43,13 +45,13 @@
         </select>
 
         <!-- Volume Slider -->
-        <div style="display:flex; align-items:center; gap:6px;" title="Volume Alarm">
-          <i class="fa-solid fa-volume-low" style="font-size:0.8rem; color:var(--text-muted);"></i>
-          <input type="range" id="alarmVolumeSlider" min="0" max="1" step="0.1" value="0.8" style="width:70px; cursor:pointer;">
+        <div class="alarm-volume-wrap" title="Volume Alarm">
+          <i class="fa-solid fa-volume-low icon-muted"></i>
+          <input type="range" class="alarm-volume-slider" id="alarmVolumeSlider" min="0" max="1" step="0.1" value="0.8">
         </div>
 
         <!-- Voice TTS Toggle -->
-        <label style="font-size:0.82rem; display:flex; align-items:center; gap:5px; cursor:pointer; color:var(--del-cyan);" title="Suara Pengingat Bicara Otomatis">
+        <label class="voice-toggle-wrap" title="Suara Pengingat Bicara Otomatis">
           <input type="checkbox" id="voiceToggleCheckbox" checked>
           <span>Voice TTS</span>
         </label>
@@ -67,23 +69,23 @@
     </header>
 
     <!-- =======================================================
-         HERO REAL-TIME CLOCK & ACTIVE HUD
+         2. HERO REAL-TIME CLOCK & ACTIVE HUD
     ======================================================= -->
     <section class="hero-clock-grid">
-      <!-- 1. Real-time Digital Clock -->
+      <!-- Real-time Digital Clock -->
       <div class="hero-clock-card">
         <div class="live-day-badge" id="liveDayBadge">Hari Ini</div>
         <div class="digital-clock-display" id="liveDigitalClock">00:00<span class="clock-sec">:00</span></div>
         <div class="live-date-text" id="liveDateText">Memuat tanggal...</div>
       </div>
 
-      <!-- 2. NOW HAPPENING ACTIVITY CARD -->
+      <!-- NOW HAPPENING ACTIVITY CARD -->
       <div class="now-happening-card">
         <div class="now-happening-header">
           <div class="status-indicator-live">
             <span class="pulse-dot"></span> SEDANG BERLANGSUNG
           </div>
-          <span style="font-size:0.8rem; color:var(--del-gold); font-family:var(--font-mono);">JADWAL KAMPUS DEL</span>
+          <span class="hud-tag-del">JADWAL KAMPUS DEL</span>
         </div>
 
         <div class="now-act-main">
@@ -107,7 +109,7 @@
         </div>
       </div>
 
-      <!-- 3. UPCOMING NEXT ACTIVITY CARD -->
+      <!-- UPCOMING NEXT ACTIVITY CARD -->
       <div class="next-activity-card">
         <div>
           <div class="next-label"><i class="fa-solid fa-forward-step"></i> BERIKUTNYA</div>
@@ -119,7 +121,7 @@
     </section>
 
     <!-- =======================================================
-         MAIN DASHBOARD: SCHEDULE TIMELINE + ASRAMA SIDEBAR
+         3. MAIN DASHBOARD: SCHEDULE TIMELINE + ASRAMA SIDEBAR
     ======================================================= -->
     <main class="main-dashboard-grid">
       <!-- LEFT: TIMELINE JADWAL -->
@@ -153,7 +155,7 @@
       <aside class="sidebar-column">
         <!-- 1. Seragam Hari Ini -->
         <div class="sidebar-card">
-          <h3><i class="fa-solid fa-shirt" style="color:var(--del-gold);"></i> Panduan Seragam Del</h3>
+          <h3><i class="fa-solid fa-shirt icon-gold"></i> Panduan Seragam Del</h3>
           <div class="uniform-box">
             <h4 class="uniform-day-title" id="todayUniformTitle">Seragam Hari Ini</h4>
             <p class="uniform-desc" id="todayUniformDesc">-</p>
@@ -163,7 +165,7 @@
 
         <!-- 2. Nilai 3M Del Quotes -->
         <div class="sidebar-card">
-          <h3><i class="fa-solid fa-heart-pulse" style="color:var(--del-cyan);"></i> Nilai 3M Hari Ini</h3>
+          <h3><i class="fa-solid fa-heart-pulse icon-cyan"></i> Nilai 3M Hari Ini</h3>
           <div class="quote-3m-box">
             <p class="quote-3m-text" id="quote3MText">-</p>
             <span class="quote-3m-motto" id="quote3MMotto">-</span>
@@ -173,7 +175,7 @@
         <!-- 3. Task / Praktikum Deadline Tracker -->
         <div class="sidebar-card">
           <div class="tasks-header-row">
-            <h3><i class="fa-solid fa-list-check" style="color:var(--del-mint);"></i> Tugas & Praktikum</h3>
+            <h3><i class="fa-solid fa-list-check icon-mint"></i> Tugas & Praktikum</h3>
             <span class="active-badge" id="activeTasksCount">0 Aktif</span>
           </div>
 
@@ -206,7 +208,7 @@
   </div>
 
   <!-- =======================================================
-       ALARM TRIGGER POPUP MODAL
+       4. ALARM TRIGGER POPUP MODAL
   ======================================================= -->
   <div class="alarm-modal-wrapper" id="alarmTriggerModal">
     <div class="alarm-modal-backdrop"></div>
@@ -214,7 +216,7 @@
       <div class="alarm-bell-animated">
         <i class="fa-solid fa-bell"></i>
       </div>
-      <div style="font-size:0.85rem; font-weight:800; color:var(--del-cyan); letter-spacing:1px; margin-bottom:4px;">
+      <div class="modal-alarm-subtitle">
         PENGINGAT KEGIATAN IT DEL
       </div>
       <h2 class="alarm-modal-title" id="modalAlarmTitle">Waktunya Belajar Malam</h2>
@@ -233,7 +235,7 @@
     </div>
   </div>
 
-  <!-- Scripts Loaded in Order -->
+  <!-- Scripts Loaded in Order (MVC Architecture) -->
   <script src="js/schedule-data.js"></script>
   <script src="js/audio-alarm.js"></script>
   <script src="js/app.js"></script>

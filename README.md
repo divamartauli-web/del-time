@@ -6,6 +6,29 @@ Membantu mahasiswa Del menjaga kedisiplinan hidup berasrama dan perkuliahan deng
 
 ---
 
+## 📁 Struktur Arsitektur Proyek (Clean Architecture)
+
+Proyek ini dibangun dengan pemisahan tanggung jawab (*Separation of Concerns*) yang rapi dan modular:
+
+```
+itdel-smart-alarm/
+│
+├── index.html                  # Halaman utama (Semantic HTML5 terstruktur)
+├── Buka_Alarm.bat              # Script peluncur cepat lokal
+├── README.md                   # Dokumentasi lengkap proyek
+├── .gitignore                  # Berkas ignore git standar
+│
+├── css/
+│   └── style.css               # Styling modular (Tokens, Header, Clock, Timeline, Sidebar, Modals)
+│
+└── js/
+    ├── schedule-data.js        # Model: Data jadwal resmi IT Del (Senin-Minggu, Seragam, Nilai 3M)
+    ├── audio-alarm.js          # Service: Engine Audio (Westminster Bell, Chime, Digital, TTS)
+    └── app.js                  # Controller: State management, live clock, UI rendering, event handlers
+```
+
+---
+
 ## 🌟 Fitur Utama
 
 1. **🔔 Sistem Alarm Jam-ke-Jam Otomatis (Real-time Hourly Alarm)**:
@@ -18,7 +41,20 @@ Membantu mahasiswa Del menjaga kedisiplinan hidup berasrama dan perkuliahan deng
      - 🕊️ *Gong Devotion / Ibadah*
 
 2. **📅 Timeline Jadwal Terpadu IT Del**:
-   - **Senin - Jumat**: Bangun Pagi (05:00), Olahraga/Mandi (05:30), Sarapan Kantin (06:15), Apel/Devotion (07:00), Sesi Kuliah & Lab (08:00–17:00), Makan Malam (18:00), Belajar Malam / Study Time (19:00), Ibadah Malam (21:30), Jam Malam / Lights Out (22:00).
+   - **Senin - Jumat**:
+     - 04.45: Bangun Pagi & Merapikan Tempat Tidur
+     - 05.00: Ibadah Pagi & Saat Teduh (*Devotion*)
+     - 05.10: Kurve Pagi Asrama
+     - 05.30: Mandi Pagi & Memakai Seragam Kuliah Resmi
+     - 06.30: Keluar Asrama menuju Kantin
+     - 07.00: Makan Pagi Bersama di Kantin
+     - 08.00 - 17.00: Sesi Perkuliahan & Lab (**Tiap SKS 50 Menit**)
+     - 17.00: Masuk Asrama & Istirahat Sore
+     - 18.30: Keluar Asrama menuju Kantin
+     - 19.00: Makan Malam di Kantin & Belajar Mandiri
+     - 21.45: Masuk Asrama
+     - 22.00: Ibadah Malam Asrama
+     - 23.00: **Jam Silent** (*Lights Out*)
    - **Sabtu**: Kurve Akbar Asrama, Unit Kegiatan Mahasiswa, dan Olahraga.
    - **Minggu**: Ibadah Kebaktian Minggu & Persiapan Akademik Pekan Baru.
 
@@ -40,7 +76,8 @@ Membantu mahasiswa Del menjaga kedisiplinan hidup berasrama dan perkuliahan deng
 ## 🚀 Cara Menjalankan Aplikasi
 
 1. Buka folder `itdel-smart-alarm`.
-2. **Klik 2x file `Buka_Alarm.bat`** atau buka langsung file `index.html` di Google Chrome / browser favorit Anda.
+2. **Klik 2x file `Buka_Alarm.bat`** atau buka langsung file `index.html` di Google Chrome / browser favorit Anda:
+   `file:///C:/Users/acer/.gemini/antigravity-ide/scratch/itdel-smart-alarm/index.html`
 
 ---
 

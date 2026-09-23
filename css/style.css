@@ -59,6 +59,42 @@ body {
 }
 
 /* ==========================================================
+   HELPER UTILITY CLASSES
+========================================================== */
+.alarm-volume-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.alarm-volume-slider {
+  width: 70px;
+  cursor: pointer;
+}
+.voice-toggle-wrap {
+  font-size: 0.82rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  color: var(--del-cyan);
+}
+.hud-tag-del {
+  font-size: 0.8rem;
+  color: var(--del-gold);
+  font-family: var(--font-mono);
+}
+.icon-gold { color: var(--del-gold); }
+.icon-cyan { color: var(--del-cyan); }
+.icon-mint { color: var(--del-mint); }
+.modal-alarm-subtitle {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--del-cyan);
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+
+/* ==========================================================
    HEADER & CAMPUS BRAND
 ========================================================== */
 .app-header {
